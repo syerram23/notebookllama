@@ -1,0 +1,24 @@
+[project]
+name = "notebooklm-clone"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "llama-cloud>=0.1.29",
+  "llama-cloud-services>=0.6.38",
+  "llama-index-core>=0.12.44",
+  "llama-index-embeddings-openai>=0.3.1",
+  "llama-index-indices-managed-llama-cloud>=0.6.11",
+  "llama-index-llms-openai>=0.4.7",
+  "mypy>=1.16.1",
+  "pre-commit>=4.2.0",
+  "pytest>=8.4.1",
+  "python-dotenv>=1.1.1"
+]
+
+[tool.mypy]
+disable_error_code = ["import-not-found", "import-untyped"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

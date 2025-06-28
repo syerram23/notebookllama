@@ -53,8 +53,8 @@ def sync_create_podcast(file_content: str):
 
 # Display the network
 st.set_page_config(
-    page_title="NotebookLlaMa",
-    page_icon="🦙",
+    page_title="NotebookLlaMa - Home",
+    page_icon="🏠",
     layout="wide",
     menu_items={
         "Get Help": "https://github.com/run-llama/notebooklm-clone/discussions/categories/general",
@@ -62,7 +62,10 @@ st.set_page_config(
         "About": "An OSS alternative to NotebookLM that runs with the power of a flully Llama!",
     },
 )
-st.title("NotebookLlaMa🦙")
+st.sidebar.header("Home🏠")
+st.sidebar.info("To switch to the Document Chat, select it from above!🔺")
+st.markdown("---")
+st.markdown("## NotebookLlaMa - Home🦙")
 
 file_input = st.file_uploader(
     label="Upload your source PDF file!", accept_multiple_files=False

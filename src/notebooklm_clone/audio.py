@@ -57,9 +57,10 @@ class MultiTurnConversation(BaseModel):
 
 
 class PodcastGenerator(BaseModel):
-    model_config: ConfigDict = ConfigDict(arbitrary_types_allowed=True)
     llm: StructuredLLM
     client: AsyncElevenLabs
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @model_validator(mode="after")
     def validate_podcast(self) -> Self:
@@ -69,6 +70,7 @@ class PodcastGenerator(BaseModel):
             raise ValueError(
                 f"The output class of the structured LLM must be {MultiTurnConversation.__qualname__}, your LLM has output class: {self.llm.output_cls.__qualname__}"
             )
+        return self
 
     async def _conversation_script(self, file_transcript: str) -> MultiTurnConversation:
         response = await self.llm.achat(

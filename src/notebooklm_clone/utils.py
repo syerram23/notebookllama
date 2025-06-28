@@ -6,8 +6,6 @@ import warnings
 
 from pydantic import BaseModel, Field, model_validator
 from llama_index.core.llms import ChatMessage
-from llama_index.core.query_engine.multistep_query_engine import MultiStepQueryEngine
-from llama_index.core.indices.query.query_transform import StepDecomposeQueryTransform
 from llama_cloud_services import LlamaExtract, LlamaParse
 from llama_cloud_services.extract import SourceText
 from llama_cloud.client import AsyncLlamaCloud
@@ -90,11 +88,9 @@ if (
     )
     PARSER = LlamaParse(api_key=os.getenv("LLAMACLOUD_API_KEY"), result_type="markdown")
     PIPELINE_ID = os.getenv("LLAMACLOUD_PIPELINE_ID")
-    qe = LlamaCloudIndex(
+    QE = LlamaCloudIndex(
         api_key=os.getenv("LLAMACLOUD_API_KEY"), pipeline_id=PIPELINE_ID
     ).as_query_engine(llm=LLM)
-    step_decompose = StepDecomposeQueryTransform(llm=LLM)
-    MS_QE = MultiStepQueryEngine(query_engine=qe, query_transform=step_decompose)
     LLM_STRUCT = LLM.as_structured_llm(MindMap)
 
 
@@ -157,13 +153,13 @@ async def get_mind_map(summary: str, highlights: List[str]) -> Union[str, None]:
 
 
 async def query_index(question: str) -> Union[str, None]:
-    response = await MS_QE.aquery(question)
+    response = await QE.aquery(question)
     if not response.response:
         return None
     sources = [node.text for node in response.source_nodes]
     return (
         "## Answer\n\n"
         + response.response
-        + "\n\n##Sources\n\n- "
+        + "\n\n## Sources\n\n- "
         + "\n- ".join(sources)
     )

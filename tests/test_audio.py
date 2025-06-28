@@ -1,8 +1,7 @@
 import pytest
 
 from elevenlabs import AsyncElevenLabs
-from src.notebooklm_clone.audio import PodcastGenerator
-from src.notebooklm_clone.models import MultiTurnConversation
+from src.notebooklm_clone.audio import PodcastGenerator, MultiTurnConversation
 from llama_index.core.llms.structured_llm import StructuredLLM
 from llama_index.core.llms import MockLLM
 from pydantic import BaseModel, ValidationError

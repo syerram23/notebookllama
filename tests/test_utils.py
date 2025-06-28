@@ -44,27 +44,19 @@ def notebook_to_process() -> Notebook:
     return Notebook(
         summary="""The Human Brain:
         The human brain is a complex organ responsible for thought, memory, emotion, and coordination. It contains about 86 billion neurons and operates through electrical and chemical signals. Divided into major parts like the cerebrum, cerebellum, and brainstem, it controls everything from basic survival functions to advanced reasoning. Despite its size, it consumes around 20% of the body’s energy. Neuroscience continues to explore its mysteries, including consciousness and neuroplasticity—its ability to adapt and reorganize.""",
-        questions_and_answers=[
-            {
-                "question": "How many neurons are in the human brain?",
-                "answer": "About 86 billion neurons.",
-            },
-            {
-                "question": "What are the main parts of the human brain?",
-                "answer": "The cerebrum, cerebellum, and brainstem.",
-            },
-            {
-                "question": "What percentage of the body's energy does the brain use?",
-                "answer": "Around 20%.",
-            },
-            {
-                "question": "What is neuroplasticity?",
-                "answer": "The brain's ability to adapt and reorganize itself.",
-            },
-            {
-                "question": "What functions is the human brain responsible for?",
-                "answer": "Thought, memory, emotion, and coordination.",
-            },
+        questions=[
+            "How many neurons are in the human brain?",
+            "What are the main parts of the human brain?",
+            "What percentage of the body's energy does the brain use?",
+            "What is neuroplasticity?",
+            "What functions is the human brain responsible for?",
+        ],
+        answers=[
+            "About 86 billion neurons.",
+            "The cerebrum, cerebellum, and brainstem.",
+            "Around 20%.",
+            "The brain's ability to adapt and reorganize itself.",
+            "Thought, memory, emotion, and coordination.",
         ],
         highlights=[
             "The human brain has about 86 billion neurons.",
@@ -100,9 +92,11 @@ async def test_mind_map_creation(
     reason="You do not have the necessary env variables to run this test.",
 )
 @pytest.mark.asyncio
-async def test_file_processing(input_file: str):
-    notebook = await process_file(filename=input_file)
+async def test_file_processing(input_file: str) -> None:
+    notebook, text = await process_file(filename=input_file)
     assert notebook is not None
+    if text is not None:
+        assert isinstance(text, str)
     try:
         notebook_model = Notebook.model_validate_json(json_data=notebook)
     except ValidationError:

@@ -15,10 +15,12 @@ mcp: FastMCP = FastMCP(name="MCP For NotebookLM")
 async def process_file_tool(
     filename: str,
 ) -> Union[str, Literal["Sorry, your file could not be processed."]]:
-    notebook_model = await process_file(filename=filename)
+    notebook_model, text = await process_file(filename=filename)
     if notebook_model is None:
         return "Sorry, your file could not be processed."
-    return notebook_model
+    if text is None:
+        text = ""
+    return notebook_model, text
 
 
 @mcp.tool(name="get_mind_map_tool", description="This tool is useful to get a mind ")

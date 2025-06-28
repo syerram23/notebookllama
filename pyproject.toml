@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+  "audioop-lts>=0.2.1",
   "elevenlabs>=2.5.0",
   "fastmcp>=2.9.2",
   "llama-cloud>=0.1.29",
@@ -16,6 +17,7 @@ dependencies = [
   "llama-index-tools-mcp>=0.2.5",
   "mypy>=1.16.1",
   "pre-commit>=4.2.0",
+  "pydub>=0.25.1",
   "pytest>=8.4.1",
   "pytest-asyncio>=1.0.0",
   "python-dotenv>=1.1.1",

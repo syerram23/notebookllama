@@ -88,7 +88,7 @@ class MultiTurnConversation(BaseModel):
         ],
     )
 
-    @model_validator
+    @model_validator(mode="after")
     def validate_conversation(self) -> Self:
         speakers = [turn.speaker for turn in self.conversation]
         if speakers[0] != "speaker1":

@@ -8,6 +8,7 @@ dependencies = [
   "audioop-lts>=0.2.1",
   "elevenlabs>=2.5.0",
   "fastmcp>=2.9.2",
+  "ffprobe>=0.5",
   "llama-cloud>=0.1.29",
   "llama-cloud-services>=0.6.38",
   "llama-index-core>=0.12.44",

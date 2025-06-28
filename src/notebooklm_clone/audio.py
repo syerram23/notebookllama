@@ -126,8 +126,8 @@ class PodcastGenerator(BaseModel):
         return output_path
 
     async def create_conversation(self, file_transcript: str):
-        conversation = self._conversation_script(file_transcript=file_transcript)
-        podcast_file = self._conversation_audio(conversation=conversation)
+        conversation = await self._conversation_script(file_transcript=file_transcript)
+        podcast_file = await self._conversation_audio(conversation=conversation)
         return podcast_file
 
 

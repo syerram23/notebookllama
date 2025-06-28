@@ -3,7 +3,7 @@ import pytest
 from src.notebooklm_clone.models import (
     Notebook,
 )
-from src.notebooklm_clone.utils import MindMap
+from src.notebooklm_clone.utils import MindMap, Node, Edge
 from src.notebooklm_clone.audio import MultiTurnConversation, ConversationTurn
 from pydantic import ValidationError
 
@@ -73,23 +73,33 @@ def test_notebook() -> None:
 def test_mind_map() -> None:
     m1 = MindMap(
         nodes=[
-            ("A", "Auxin is released"),
-            ("B", "Travels to the roots"),
-            ("C", "Root cells grow in dimensions"),
+            Node(id="A", content="Auxin is released"),
+            Node(id="B", content="Travels to the roots"),
+            Node(id="C", content="Root cells grow"),
         ],
-        edges=[("A", "B"), ("A", "C"), ("B", "C")],
+        edges=[
+            Edge(from_id="A", to_id="B"),
+            Edge(from_id="A", to_id="C"),
+            Edge(from_id="B", to_id="C"),
+        ],
     )
-    assert m1.nodes[0][0] == "A"
-    assert m1.nodes[0][1] == "Auxin is released"
-    assert m1.edges[0] == ("A", "B")
+    assert m1.nodes[0].id == "A"
+    assert m1.nodes[0].content == "Auxin is released"
+    assert m1.edges[0].from_id == "A"
+    assert m1.edges[0].to_id == "B"
+
     with pytest.raises(ValidationError):
         MindMap(
             nodes=[
-                ("A", "Auxin is released"),
-                ("B", "Travels to the roots"),
-                ("C", "Root cells grow in dimensions"),
+                Node(id="A", content="Auxin is released"),
+                Node(id="B", content="Travels to the roots"),
+                Node(id="C", content="Root cells grow"),
             ],
-            edges=[("A", "B"), ("A", "D"), ("B", "C")],
+            edges=[
+                Edge(from_id="A", to_id="B"),
+                Edge(from_id="A", to_id="D"),  # "D" does not exist
+                Edge(from_id="B", to_id="C"),
+            ],
         )
 
 

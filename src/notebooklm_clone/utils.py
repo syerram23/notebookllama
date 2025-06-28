@@ -9,6 +9,7 @@ from llama_index.core.llms import ChatMessage
 from llama_index.core.query_engine.multistep_query_engine import MultiStepQueryEngine
 from llama_index.core.indices.query.query_transform import StepDecomposeQueryTransform
 from llama_cloud_services import LlamaExtract, LlamaParse
+from llama_cloud_services.extract import SourceText
 from llama_cloud.client import AsyncLlamaCloud
 from llama_index.indices.managed.llama_cloud import LlamaCloudIndex
 from llama_index.llms.openai import OpenAIResponses
@@ -19,34 +20,52 @@ from pyvis.network import Network
 load_dotenv()
 
 
+class Node(BaseModel):
+    id: str
+    content: str
+
+
+class Edge(BaseModel):
+    from_id: str
+    to_id: str
+
+
 class MindMap(BaseModel):
-    nodes: List[Tuple[str, str]] = Field(
-        description="List of nodes of the mind map, with their ID as first element and their content as second. Content should never exceed 5 words.",
+    nodes: List[Node] = Field(
+        description="List of nodes in the mind map, each represented as a Node object with an 'id' and concise 'content' (no more than 5 words).",
         examples=[
             [
-                ("A", "Fall of the Roman Empire"),
-                ("B", "476 AD"),
-                ("C", "Barbarian invasions"),
+                Node(id="A", content="Fall of the Roman Empire"),
+                Node(id="B", content="476 AD"),
+                Node(id="C", content="Barbarian invasions"),
             ],
             [
-                ("A", "Auxin is released"),
-                ("B", "Travels to the roots"),
-                ("C", "Root cells grow in dimensions"),
+                Node(id="A", content="Auxin is released"),
+                Node(id="B", content="Travels to the roots"),
+                Node(id="C", content="Root cells grow"),
             ],
         ],
     )
-    edges: List[Tuple[str, str]] = Field(
-        description="The edges connecting the nodes of the mind map, as a list of tuples containing the IDs of the two connected edges.",
+    edges: List[Edge] = Field(
+        description="The edges connecting the nodes of the mind map, as a list of Edge objects with from_id and to_id fields representing the source and target node IDs.",
         examples=[
-            [("A", "B"), ("A", "C"), ("B", "C")],
-            [("C", "A"), ("B", "C"), ("A", "B")],
+            [
+                Edge(from_id="A", to_id="B"),
+                Edge(from_id="A", to_id="C"),
+                Edge(from_id="B", to_id="C"),
+            ],
+            [
+                Edge(from_id="C", to_id="A"),
+                Edge(from_id="B", to_id="C"),
+                Edge(from_id="A", to_id="B"),
+            ],
         ],
     )
 
     @model_validator(mode="after")
     def validate_mind_map(self) -> Self:
-        all_nodes = [el[0] for el in self.nodes]
-        all_edges = [el[0] for el in self.edges] + [el[1] for el in self.edges]
+        all_nodes = [el.id for el in self.nodes]
+        all_edges = [el.from_id for el in self.edges] + [el.to_id for el in self.edges]
         if set(all_nodes).issubset(set(all_edges)) and set(all_nodes) != set(all_edges):
             raise ValueError(
                 "There are non-existing nodes listed as source or target in the edges"
@@ -88,14 +107,16 @@ async def process_file(
     await CLIENT.pipelines.add_files_to_pipeline_api(
         pipeline_id=PIPELINE_ID, request=files
     )
-    extraction_output = await EXTRACT_AGENT.aextract(files=filename)
     document = await PARSER.aparse(file_path=filename)
     md_content = await document.aget_markdown_documents()
+    if len(md_content) == 0:
+        return None, None
+    text = "\n\n---\n\n".join([md.text for md in md_content])
+    extraction_output = await EXTRACT_AGENT.aextract(
+        files=SourceText(text_content=text, filename=file.name)
+    )
     if extraction_output:
-        if len(md_content) > 0:
-            text = "\n\n---\n\n".join([md.text for md in md_content])
-            return json.dumps(extraction_output.data, indent=4), text
-        return json.dumps(extraction_output.data, indent=4), None
+        return json.dumps(extraction_output.data, indent=4), text
     return None, None
 
 
@@ -111,14 +132,21 @@ async def get_mind_map(summary: str, highlights: List[str]) -> Union[str, None]:
         response = await LLM_STRUCT.achat(messages=messages)
         response_json = json.loads(response.message.content)
         net = Network(directed=True, height="750px", width="100%")
+        net.set_options("""
+            var options = {
+            "physics": {
+                "enabled": false
+            }
+            }
+            """)
         nodes = response_json["nodes"]
         edges = response_json["edges"]
         for node in nodes:
-            net.add_node(n_id=node[0], label=node[1])
+            net.add_node(n_id=node["id"], label=node["content"])
         for edge in edges:
-            net.add_edge(source=edge[0], to=edge[1])
+            net.add_edge(source=edge["from_id"], to=edge["to_id"])
         name = str(uuid.uuid4())
-        net.save_graph(name)
+        net.save_graph(name + ".html")
         return name + ".html"
     except Exception as e:
         warnings.warn(
@@ -126,3 +154,16 @@ async def get_mind_map(summary: str, highlights: List[str]) -> Union[str, None]:
             category=MindMapCreationFailedWarning,
         )
         return None
+
+
+async def query_index(question: str) -> Union[str, None]:
+    response = await MS_QE.aquery(question)
+    if not response.response:
+        return None
+    sources = [node.text for node in response.source_nodes]
+    return (
+        "## Answer\n\n"
+        + response.response
+        + "\n\n##Sources\n\n- "
+        + "\n- ".join(sources)
+    )

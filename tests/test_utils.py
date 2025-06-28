@@ -20,7 +20,7 @@ skip_condition = not (
 
 @pytest.fixture()
 def input_file() -> str:
-    return "data/test/brain.pdf"
+    return "data/test/brain_for_kids.pdf"
 
 
 @pytest.fixture()
@@ -94,9 +94,9 @@ async def test_mind_map_creation(
 @pytest.mark.asyncio
 async def test_file_processing(input_file: str) -> None:
     notebook, text = await process_file(filename=input_file)
+    print(notebook)
     assert notebook is not None
-    if text is not None:
-        assert isinstance(text, str)
+    assert isinstance(text, str)
     try:
         notebook_model = Notebook.model_validate_json(json_data=notebook)
     except ValidationError:

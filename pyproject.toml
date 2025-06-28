@@ -15,13 +15,15 @@ dependencies = [
   "llama-index-indices-managed-llama-cloud>=0.6.11",
   "llama-index-llms-openai>=0.4.7",
   "llama-index-tools-mcp>=0.2.5",
+  "llama-index-workflows>=1.0.1",
   "mypy>=1.16.1",
   "pre-commit>=4.2.0",
   "pydub>=0.25.1",
   "pytest>=8.4.1",
   "pytest-asyncio>=1.0.0",
   "python-dotenv>=1.1.1",
-  "pyvis>=0.3.2"
+  "pyvis>=0.3.2",
+  "streamlit>=1.46.1"
 ]
 
 [tool.mypy]

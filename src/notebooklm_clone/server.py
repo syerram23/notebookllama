@@ -1,9 +1,6 @@
-"""MCP Server to serve tools."""
-
-from utils import get_mind_map, process_file
+from utils import get_mind_map, process_file, query_index
 from fastmcp import FastMCP
 from typing import List, Union, Literal
-
 
 mcp: FastMCP = FastMCP(name="MCP For NotebookLM")
 
@@ -20,7 +17,7 @@ async def process_file_tool(
         return "Sorry, your file could not be processed."
     if text is None:
         text = ""
-    return notebook_model, text
+    return notebook_model + "\n%separator%\n" + text
 
 
 @mcp.tool(name="get_mind_map_tool", description="This tool is useful to get a mind ")
@@ -31,3 +28,15 @@ async def get_mind_map_tool(
     if mind_map_fl is None:
         return "Sorry, mind map creation failed."
     return mind_map_fl
+
+
+@mcp.tool(name="query_index_tool", description="Query a LlamaCloud index.")
+async def query_index_tool(question: str) -> str:
+    response = await query_index(question=question)
+    if response is None:
+        return "Sorry, I was unable to find an answer to your question."
+    return response
+
+
+if __name__ == "__main__":
+    mcp.run(transport="streamable-http")

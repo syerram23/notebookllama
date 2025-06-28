@@ -1,6 +1,7 @@
 import tempfile as temp
 import os
 import uuid
+from dotenv import load_dotenv
 
 from pydub import AudioSegment
 from elevenlabs import AsyncElevenLabs
@@ -9,6 +10,7 @@ from typing_extensions import Self
 from typing import List, Literal
 from pydantic import BaseModel, ConfigDict, model_validator, Field
 from llama_index.core.llms import ChatMessage
+from llama_index.llms.openai import OpenAIResponses
 
 
 class ConversationTurn(BaseModel):
@@ -127,3 +129,13 @@ class PodcastGenerator(BaseModel):
         conversation = self._conversation_script(file_transcript=file_transcript)
         podcast_file = self._conversation_audio(conversation=conversation)
         return podcast_file
+
+
+load_dotenv()
+
+if os.getenv("ELEVENLABS_API_KEY", None) and os.getenv("OPENAI_API_KEY", None):
+    SLLM = OpenAIResponses(
+        model="gpt-4.1", api_key=os.getenv("OPENAI_API_KEY")
+    ).as_structured_llm(MultiTurnConversation)
+    EL_CLIENT = AsyncElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
+    PODCAST_GEN = PodcastGenerator(llm=SLLM, client=EL_CLIENT)

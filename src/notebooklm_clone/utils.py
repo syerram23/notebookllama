@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import json
 import os
 import uuid
+import warnings
 
 from models import MindMap
 from llama_index.core.llms import ChatMessage
@@ -37,6 +38,10 @@ if (
     LLM_STRUCT = LLM.as_structured_llm(MindMap)
 
 
+class MindMapCreationFailedWarning(Warning):
+    """A warning returned if the mind map creation failed"""
+
+
 async def process_file(filename: str) -> Union[str, None]:
     with open(filename, "rb") as f:
         file = await CLIENT.files.upload_file(upload_file=f)
@@ -50,23 +55,30 @@ async def process_file(filename: str) -> Union[str, None]:
     return None
 
 
-async def get_mind_map(summary: str, highlights: List[str]):
-    keypoints = "\n- ".join(highlights)
-    messages = [
-        ChatMessage(
-            role="user",
-            content=f"This is the summary for my document: {summary}\n\nAnd these are the key points:\n- {keypoints}",
+async def get_mind_map(summary: str, highlights: List[str]) -> Union[str, None]:
+    try:
+        keypoints = "\n- ".join(highlights)
+        messages = [
+            ChatMessage(
+                role="user",
+                content=f"This is the summary for my document: {summary}\n\nAnd these are the key points:\n- {keypoints}",
+            )
+        ]
+        response = await LLM_STRUCT.achat(messages=messages)
+        response_json = json.loads(response.message.content)
+        net = Network(directed=True, height="750px", width="100%")
+        nodes = response_json["nodes"]
+        edges = response_json["edges"]
+        for node in nodes:
+            net.add_node(n_id=node[0], label=node[1])
+        for edge in edges:
+            net.add_edge(source=edge[0], to=edge[1])
+        name = str(uuid.uuid4())
+        net.save_graph(name)
+        return name + ".html"
+    except Exception as e:
+        warnings.warn(
+            message=f"An error occurred during the creation of the mind map: {e}",
+            category=MindMapCreationFailedWarning,
         )
-    ]
-    response = await LLM_STRUCT.achat(messages=messages)
-    response_json = json.loads(response.message.content)
-    net = Network(directed=True, height="750px", width="100%")
-    nodes = response_json["nodes"]
-    edges = response_json["edges"]
-    for node in nodes:
-        net.add_node(n_id=node[0], label=node[1])
-    for edge in edges:
-        net.add_edge(source=edge[0], to=edge[1])
-    name = str(uuid.uuid4())
-    net.save_graph(name)
-    return name + ".html"
+        return None

@@ -61,3 +61,46 @@ class MindMap(BaseModel):
                 "There are non-existing nodes listed as source or target in the edges"
             )
         return self
+
+
+class ConversationTurn(BaseModel):
+    speaker: Literal["speaker1", "speaker2"] = Field(
+        description="The person who is speaking",
+    )
+    content: str = Field(
+        description="The content of the speech",
+    )
+
+
+class MultiTurnConversation(BaseModel):
+    conversation: List[ConversationTurn] = Field(
+        description="List of conversation turns. Conversation must start with speaker1, and continue with an alternance of speaker1 and speaker2",
+        min_length=3,
+        max_length=50,
+        examples=[
+            [
+                ConversationTurn(speaker="speaker1", content="Hello, who are you?"),
+                ConversationTurn(
+                    speaker="speaker2", content="I am very well, how about you?"
+                ),
+                ConversationTurn(speaker="speaker1", content="I am well too, thanks!"),
+            ]
+        ],
+    )
+
+    @model_validator
+    def validate_conversation(self) -> Self:
+        speakers = [turn.speaker for turn in self.conversation]
+        if speakers[0] != "speaker1":
+            raise ValueError("Conversation must start with speaker1")
+        for i, speaker in enumerate(speakers):
+            if i % 2 == 0 and speaker != "speaker1":
+                raise ValueError(
+                    "Conversation must be an alternance between speaker1 and speaker2"
+                )
+            elif i % 2 != 0 and speaker != "speaker2":
+                raise ValueError(
+                    "Conversation must be an alternance between speaker1 and speaker2"
+                )
+            continue
+        return self

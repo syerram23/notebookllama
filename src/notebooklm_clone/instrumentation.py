@@ -6,14 +6,14 @@ import tempfile as temp
 import os
 
 from sqlalchemy import Engine, create_engine, Connection, Result
-from typing import Optional, Dict, Any, List, Literal, Union
+from typing import Optional, Dict, Any, List, Literal, Union, cast
 
 
 class OtelTracesSqlEngine:
     def __init__(
         self,
         engine: Optional[Engine] = None,
-        engine_url: Optional[Dict[str, Any]] = None,
+        engine_url: Optional[str] = None,
         table_name: Optional[str] = None,
         service_name: Optional[str] = None,
     ):
@@ -139,14 +139,15 @@ class OtelTracesSqlEngine:
 
     def execute(
         self,
-        statement: str,
-        parameters: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]] = None,
-        execution_options: Optional[Dict[str, Any]] = None,
+        statement: Any,
+        parameters: Optional[Any] = None,
+        execution_options: Optional[Any] = None,
         return_pandas: bool = False,
     ) -> Union[Result, pd.DataFrame]:
         if not self._connection:
             self._connect()
         if not return_pandas:
+            self._connection = cast(Connection, self._connection)
             return self._connection.execute(
                 statement=statement,
                 parameters=parameters,

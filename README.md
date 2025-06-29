@@ -40,6 +40,12 @@ uv run tools/create_llama_cloud_index.py
 
 And you're ready to set up the app!
 
+Launch Postgres and Jaeger:
+
+```bash
+docker compose up -d
+```
+
 Run the **MCP** server:
 
 ```bash

@@ -3,12 +3,36 @@ import io
 import os
 import asyncio
 import tempfile as temp
+from dotenv import load_dotenv
+import time
 import streamlit.components.v1 as components
 
 from pathlib import Path
 from audio import PODCAST_GEN
 from typing import Tuple
 from workflow import NotebookLMWorkflow, FileInputEvent, NotebookOutputEvent
+from instrumentation import OtelTracesSqlEngine
+from llama_index.observability.otel import LlamaIndexOpenTelemetry
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
+    OTLPSpanExporter,
+)
+
+load_dotenv()
+
+# define a custom span exporter
+span_exporter = OTLPSpanExporter("http://0.0.0.0:4318/v1/traces")
+
+# initialize the instrumentation object
+instrumentor = LlamaIndexOpenTelemetry(
+    service_name_or_resource="agent.traces",
+    span_exporter=span_exporter,
+    debug=True,
+)
+sql_engine = OtelTracesSqlEngine(
+    engine_url=f"postgresql+psycopg2://{os.getenv('pgql_user')}:{os.getenv('pgql_psw')}@localhost:5432/{os.getenv('pgql_db')}",
+    table_name="agent_traces",
+    service_name="agent.traces",
+)
 
 WF = NotebookLMWorkflow(timeout=600)
 
@@ -24,6 +48,7 @@ async def run_workflow(file: io.BytesIO) -> Tuple[str, str, str, str, str]:
     content = file.getvalue()
     with open(fl.name, "wb") as f:
         f.write(content)
+    st_time = int(time.time() * 1000000)
     ev = FileInputEvent(file=fl.name)
     result: NotebookOutputEvent = await WF.run(start_event=ev)
     q_and_a = ""
@@ -34,7 +59,9 @@ async def run_workflow(file: io.BytesIO) -> Tuple[str, str, str, str, str]:
     mind_map = result.mind_map
     if Path(mind_map).is_file():
         mind_map = read_html_file(mind_map)
-        os.remove(mind_map)
+        os.remove(result.mind_map)
+    end_time = int(time.time() * 1000000)
+    sql_engine.to_sql_database(start_time=st_time, end_time=end_time)
     return result.md_content, result.summary, q_and_a, bullet_points, mind_map
 
 
@@ -138,3 +165,6 @@ if file_input is not None:
 
 else:
     st.info("Please upload a PDF file to get started.")
+
+if __name__ == "__main__":
+    instrumentor.start_registering()

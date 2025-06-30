@@ -4,7 +4,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from llama_cloud_services import LlamaExtract
-from src.notebooklm_clone.models import Notebook
+from src.notebookllama.models import Notebook
 from dotenv import load_dotenv
 
 load_dotenv()

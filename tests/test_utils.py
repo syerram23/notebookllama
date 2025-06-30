@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 
 from typing import Callable
 from pydantic import ValidationError
-from src.notebooklm_clone.utils import process_file, get_mind_map
-from src.notebooklm_clone.models import Notebook
+from src.notebookllama.utils import process_file, get_mind_map
+from src.notebookllama.models import Notebook
 
 load_dotenv()
 

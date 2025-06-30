@@ -4,7 +4,7 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 
-from src.notebooklm_clone.instrumentation import OtelTracesSqlEngine
+from src.notebookllama.instrumentation import OtelTracesSqlEngine
 from sqlalchemy import text
 
 ENV = load_dotenv()

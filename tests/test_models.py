@@ -1,10 +1,10 @@
 import pytest
 
-from src.notebooklm_clone.models import (
+from src.notebookllama.models import (
     Notebook,
 )
-from src.notebooklm_clone.utils import MindMap, Node, Edge
-from src.notebooklm_clone.audio import MultiTurnConversation, ConversationTurn
+from src.notebookllama.utils import MindMap, Node, Edge
+from src.notebookllama.audio import MultiTurnConversation, ConversationTurn
 from pydantic import ValidationError
 
 

@@ -2,12 +2,12 @@ import pytest
 import json
 
 from pydantic import ValidationError
-from src.notebooklm_clone.workflow import (
+from src.notebookllama.workflow import (
     NotebookLMWorkflow,
     MindMapCreationEvent,
     NotebookOutputEvent,
 )
-from src.notebooklm_clone.models import Notebook
+from src.notebookllama.models import Notebook
 from workflows import Workflow
 
 

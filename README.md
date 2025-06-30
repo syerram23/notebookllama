@@ -9,7 +9,7 @@ This project is aimed at producing a fully open-source, [**LlamaCloud**](https//
 Get the GitHub repository:
 
 ```bash
-git clone https://github.com/run-llama/notebooklm-clone
+git clone https://github.com/run-llama/notebookllama
 ```
 
 Install dependencies:
@@ -49,13 +49,13 @@ docker compose up -d
 Run the **MCP** server:
 
 ```bash
-uv run src/notebooklm_clone/server.py
+uv run src/notebookllama/server.py
 ```
 
 Now, launch the Streamlit app:
 
 ```bash
-streamlit run src/notebooklm_clone/Home.py
+streamlit run src/notebookllama/Home.py
 ```
 
 > [!IMPORTANT]

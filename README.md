@@ -15,7 +15,7 @@ git clone https://github.com/run-llama/notebookllama
 Install dependencies:
 
 ```bash
-cd notebooklm-clone/
+cd notebookllama/
 uv sync
 ```
 

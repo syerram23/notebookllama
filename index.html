@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotebookLlaMa 🦙 - Open Source NotebookLM Alternative</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="logo">🦙</span>
+                <span class="brand-text">NotebookLlaMa</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#architecture" class="nav-link">Architecture</a>
+                <a href="#setup" class="nav-link">Setup</a>
+                <a href="#demo" class="nav-link">Demo</a>
+                <a href="https://github.com/run-llama/notebookllama" class="nav-link github-link" target="_blank">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    NotebookLlaMa 🦙
+                    <span class="hero-subtitle">A fluffy and open-source alternative to NotebookLM!</span>
+                </h1>
+                <p class="hero-description">
+                    Transform your documents into interactive experiences with AI-powered summaries, 
+                    Q&A generation, mind maps, and podcast-style conversations.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#setup" class="btn btn-primary">Get Started</a>
+                    <a href="#demo" class="btn btn-secondary">View Demo</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="feature-preview">
+                    <div class="preview-card">
+                        <div class="preview-header">
+                            <div class="preview-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <span class="preview-title">Document Processing</span>
+                        </div>
+                        <div class="preview-content">
+                            <div class="upload-zone">
+                                <div class="upload-icon">📄</div>
+                                <p>Upload PDF → AI Analysis → Interactive Results</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Powerful Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Smart Document Analysis</h3>
+                    <p>Extract key insights, generate summaries, and create bullet points from any PDF document using advanced AI processing.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">❓</div>
+                    <h3>Automatic Q&A Generation</h3>
+                    <p>Generate relevant questions and answers based on document content to enhance understanding and retention.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Interactive Mind Maps</h3>
+                    <p>Visualize document concepts and relationships through dynamically generated mind maps for better comprehension.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎙️</div>
+                    <h3>AI Podcast Generation</h3>
+                    <p>Transform documents into engaging podcast-style conversations between two AI speakers using ElevenLabs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Document Chat</h3>
+                    <p>Ask questions about your documents and get intelligent responses with source citations through MCP integration.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Observability Dashboard</h3>
+                    <p>Monitor system performance with detailed traces, analytics, and SQL query capabilities for debugging.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture" class="architecture">
+        <div class="container">
+            <h2 class="section-title">Architecture Overview</h2>
+            <div class="architecture-content">
+                <div class="architecture-diagram">
+                    <div class="arch-layer">
+                        <h4>Frontend Layer</h4>
+                        <div class="arch-components">
+                            <div class="arch-component streamlit">Streamlit UI</div>
+                            <div class="arch-component">Multi-page App</div>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <h4>Processing Layer</h4>
+                        <div class="arch-components">
+                            <div class="arch-component">LlamaIndex Workflows</div>
+                            <div class="arch-component">MCP Server</div>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <h4>AI Services</h4>
+                        <div class="arch-components">
+                            <div class="arch-component openai">OpenAI GPT-4</div>
+                            <div class="arch-component llamacloud">LlamaCloud</div>
+                            <div class="arch-component elevenlabs">ElevenLabs TTS</div>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <h4>Infrastructure</h4>
+                        <div class="arch-components">
+                            <div class="arch-component postgres">PostgreSQL</div>
+                            <div class="arch-component jaeger">Jaeger Tracing</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="architecture-details">
+                    <div class="tech-stack">
+                        <h4>Technology Stack</h4>
+                        <div class="tech-items">
+                            <span class="tech-item">Python 3.13</span>
+                            <span class="tech-item">Streamlit</span>
+                            <span class="tech-item">LlamaIndex</span>
+                            <span class="tech-item">OpenAI API</span>
+                            <span class="tech-item">LlamaCloud</span>
+                            <span class="tech-item">ElevenLabs</span>
+                            <span class="tech-item">PostgreSQL</span>
+                            <span class="tech-item">Docker</span>
+                            <span class="tech-item">Jaeger</span>
+                            <span class="tech-item">MCP Protocol</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="setup" class="setup">
+        <div class="container">
+            <h2 class="section-title">Quick Setup Guide</h2>
+            <div class="setup-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Clone Repository</h3>
+                        <div class="code-block">
+                            <code>git clone https://github.com/run-llama/notebookllama</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Install Dependencies</h3>
+                        <div class="code-block">
+                            <code>cd notebookllama/<br>uv sync</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Configure API Keys</h3>
+                        <div class="code-block">
+                            <code>mv .env.example .env<br># Add your API keys to .env</code>
+                        </div>
+                        <div class="api-keys">
+                            <div class="api-key">
+                                <strong>OPENAI_API_KEY:</strong> <a href="https://platform.openai.com/api-keys" target="_blank">Get from OpenAI</a>
+                            </div>
+                            <div class="api-key">
+                                <strong>ELEVENLABS_API_KEY:</strong> <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank">Get from ElevenLabs</a>
+                            </div>
+                            <div class="api-key">
+                                <strong>LLAMACLOUD_API_KEY:</strong> <a href="https://cloud.llamaindex.ai/" target="_blank">Get from LlamaCloud</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Setup Services</h3>
+                        <div class="code-block">
+                            <code>uv run tools/create_llama_extract_agent.py<br>uv run tools/create_llama_cloud_index.py<br>docker compose up -d</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Launch Application</h3>
+                        <div class="code-block">
+                            <code>uv run src/notebookllama/server.py &<br>streamlit run src/notebookllama/Home.py</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="demo">
+        <div class="container">
+            <h2 class="section-title">Application Demo</h2>
+            <div class="demo-content">
+                <div class="demo-tabs">
+                    <button class="demo-tab active" data-tab="home">Home</button>
+                    <button class="demo-tab" data-tab="chat">Document Chat</button>
+                    <button class="demo-tab" data-tab="dashboard">Observability</button>
+                </div>
+                
+                <div class="demo-panel active" id="home-panel">
+                    <div class="demo-screenshot">
+                        <div class="browser-frame">
+                            <div class="browser-header">
+                                <div class="browser-dots">
+                                    <span></span><span></span><span></span>
+                                </div>
+                                <div class="browser-url">localhost:8751</div>
+                            </div>
+                            <div class="browser-content">
+                                <div class="streamlit-app">
+                                    <div class="app-header">
+                                        <h2>NotebookLlaMa - Home🦙</h2>
+                                    </div>
+                                    <div class="upload-section">
+                                        <div class="file-uploader">
+                                            <div class="upload-area">
+                                                <div class="upload-icon">📄</div>
+                                                <p>Upload your source PDF file!</p>
+                                                <button class="upload-btn">Browse files</button>
+                                            </div>
+                                        </div>
+                                        <button class="process-btn">Process Document</button>
+                                    </div>
+                                    <div class="results-section">
+                                        <div class="summary-card">
+                                            <h3>Summary</h3>
+                                            <p>AI-generated summary appears here...</p>
+                                        </div>
+                                        <div class="highlights-card">
+                                            <h3>Bullet Points</h3>
+                                            <ul>
+                                                <li>Key insight 1</li>
+                                                <li>Key insight 2</li>
+                                                <li>Key insight 3</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-panel" id="chat-panel">
+                    <div class="demo-screenshot">
+                        <div class="browser-frame">
+                            <div class="browser-header">
+                                <div class="browser-dots">
+                                    <span></span><span></span><span></span>
+                                </div>
+                                <div class="browser-url">localhost:8751/Document_Chat</div>
+                            </div>
+                            <div class="browser-content">
+                                <div class="chat-interface">
+                                    <div class="chat-header">
+                                        <h2>NotebookLlaMa - Document Chat🗣</h2>
+                                    </div>
+                                    <div class="chat-messages">
+                                        <div class="message user-message">
+                                            <div class="message-content">What are the main points of this document?</div>
+                                        </div>
+                                        <div class="message assistant-message">
+                                            <div class="message-content">
+                                                Based on the document, the main points are:
+                                                <ul>
+                                                    <li>Point 1 with detailed explanation</li>
+                                                    <li>Point 2 with context</li>
+                                                    <li>Point 3 with supporting evidence</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chat-input">
+                                        <input type="text" placeholder="Ask a question about your document">
+                                        <button>Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-panel" id="dashboard-panel">
+                    <div class="demo-screenshot">
+                        <div class="browser-frame">
+                            <div class="browser-header">
+                                <div class="browser-dots">
+                                    <span></span><span></span><span></span>
+                                </div>
+                                <div class="browser-url">localhost:8751/Observability_Dashboard</div>
+                            </div>
+                            <div class="browser-content">
+                                <div class="dashboard">
+                                    <div class="dashboard-header">
+                                        <h2>NotebookLlaMa - Observability Dashboard🔍</h2>
+                                    </div>
+                                    <div class="analytics-section">
+                                        <h3>📊 Analytics Overview</h3>
+                                        <div class="charts-grid">
+                                            <div class="chart-card">
+                                                <h4>Latency Overview</h4>
+                                                <div class="chart-placeholder">
+                                                    <div class="chart-line"></div>
+                                                </div>
+                                            </div>
+                                            <div class="chart-card">
+                                                <h4>Status Code Distribution</h4>
+                                                <div class="chart-placeholder">
+                                                    <div class="chart-pie"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>NotebookLlaMa 🦙</h4>
+                    <p>An open-source alternative to NotebookLM powered by LlamaIndex and modern AI technologies.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/run-llama/notebookllama" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/run-llama/notebookllama/discussions" target="_blank">Discussions</a></li>
+                        <li><a href="https://github.com/run-llama/notebookllama/issues" target="_blank">Issues</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Technologies</h4>
+                    <ul>
+                        <li><a href="https://llamaindex.ai/" target="_blank">LlamaIndex</a></li>
+                        <li><a href="https://cloud.llamaindex.ai/" target="_blank">LlamaCloud</a></li>
+                        <li><a href="https://streamlit.io/" target="_blank">Streamlit</a></li>
+                        <li><a href="https://openai.com/" target="_blank">OpenAI</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 NotebookLlaMa. Licensed under MIT License.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

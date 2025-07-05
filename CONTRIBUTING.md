@@ -28,9 +28,10 @@ Do you want to contribute to this project? Make sure to read this guidelines fir
 **How to do it**:
 
 1. Fork this repository
-2. Install `pre-commit` and make sure to have it within the Git Hooks for your fork:
+2. Install `uv` and `pre-commit` and make sure to have pre-commit within the Git Hooks for your fork:
 
 ```bash
+pip install uv
 pip install pre-commit
 pre-commit install
 ```

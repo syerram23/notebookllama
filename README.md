@@ -18,6 +18,7 @@ Install dependencies:
 
 ```bash
 cd notebookllama/
+pip install uv
 uv sync
 ```
 
